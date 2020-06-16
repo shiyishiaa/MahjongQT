@@ -1,0 +1,38 @@
+<RCC>
+    <qresource prefix="/MahjongQT">
+        <file>Resources/Images/001.png</file>
+        <file>Resources/Images/002.png</file>
+        <file>Resources/Images/003.png</file>
+        <file>Resources/Images/004.png</file>
+        <file>Resources/Images/005.png</file>
+        <file>Resources/Images/006.png</file>
+        <file>Resources/Images/007.png</file>
+        <file>Resources/Images/008.png</file>
+        <file>Resources/Images/009.png</file>
+        <file>Resources/Images/010.png</file>
+        <file>Resources/Images/011.png</file>
+        <file>Resources/Images/012.png</file>
+        <file>Resources/Images/013.png</file>
+        <file>Resources/Images/014.png</file>
+        <file>Resources/Images/015.png</file>
+        <file>Resources/Images/016.png</file>
+        <file>Resources/Images/017.png</file>
+        <file>Resources/Images/018.png</file>
+        <file>Resources/Images/019.png</file>
+        <file>Resources/Images/020.png</file>
+        <file>Resources/Images/021.png</file>
+        <file>Resources/Images/022.png</file>
+        <file>Resources/Images/023.png</file>
+        <file>Resources/Images/024.png</file>
+        <file>Resources/Images/025.png</file>
+        <file>Resources/Images/026.png</file>
+        <file>Resources/Images/027.png</file>
+        <file>Resources/Images/028.png</file>
+        <file>Resources/Images/029.png</file>
+        <file>Resources/Images/030.png</file>
+        <file>Resources/Images/031.png</file>
+        <file>Resources/Images/032.png</file>
+        <file>Resources/Images/033.png</file>
+        <file>Resources/Images/034.png</file>
+    </qresource>
+</RCC>
