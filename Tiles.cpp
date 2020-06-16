@@ -152,7 +152,7 @@ void Tiles::output(string input) {
     }
     sort();
     for (int j = 0; j < num; j++) {
-        this->picPath[j] = tiles[j].generatePath(&tiles[j]);
+        this->picPath[j] = Mahjong::generatePath(&tiles[j]);
     }
 }
 
@@ -163,14 +163,14 @@ void Tiles::output(string input) {
  */
 //判断胡牌
 bool Tiles::judge() {
-    int classNum[14];//牌类
+    int typeNum[14];//牌类
     int mahjongNum[14];//牌面数字
     int word[14];//牌面字
     int result[14] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};//全为0则胡牌，用于剔除已使用的牌
 
     for (int i = 0; i < 14; i++)//存入手牌信息
     {
-        classNum[i] = this->tiles[i].getClass();
+        typeNum[i] = this->tiles[i].getType();
         mahjongNum[i] = this->tiles[i].getNum();
         word[i] = this->tiles[i].getWord();
     }
@@ -180,14 +180,14 @@ bool Tiles::judge() {
 
     for (int i = nowResult + 1; (i < 14) && (nowResult < 14); i = nowResult + 1)//在当前牌后找符合胡牌条件的牌
     {
-        if ((classNum[i] == classNum[nowResult]) && (classNum[i] != 3) &&
+        if ((typeNum[i] == typeNum[nowResult]) && (typeNum[i] != 3) &&
             mahjongNum[i] == (mahjongNum[nowResult] + 1) &&
             (result[i] != 0))//找到万条筒中的AB？
         {
             int a = i;
             for (int ii = i + 1; ii < 14; ii++)//在AB后找C
             {
-                if ((classNum[ii] == classNum[nowResult]) && mahjongNum[ii] == (mahjongNum[nowResult] + 2) &&
+                if ((typeNum[ii] == typeNum[nowResult]) && mahjongNum[ii] == (mahjongNum[nowResult] + 2) &&
                     (result[ii] != 0))//找到ABC
                 {
                     result[nowResult] = 0;
@@ -197,13 +197,13 @@ bool Tiles::judge() {
                 } else//在剩下的牌中，AB后找不到C，不能胡牌
                     return false;
             }
-        } else if ((classNum[i] == classNum[nowResult]) && (classNum[i] != 3) &&
+        } else if ((typeNum[i] == typeNum[nowResult]) && (typeNum[i] != 3) &&
                    (mahjongNum[i] == mahjongNum[nowResult]) &&
                    (result[i] != 0))//找到AA？
         {
             int a = i;
             for (int ii = i + 1; ii < 14; ii++)//在AA后找A
-                if ((classNum[ii] == classNum[nowResult]) && (mahjongNum[ii] == mahjongNum[nowResult]) &&
+                if ((typeNum[ii] == typeNum[nowResult]) && (mahjongNum[ii] == mahjongNum[nowResult]) &&
                     (result[ii] != 0))//找到AAA
                 {
                     result[nowResult] = 0;
@@ -218,12 +218,12 @@ bool Tiles::judge() {
                     break;//两张牌对应的位置标为已查
                 } else
                     return false;//第二次出现AA，不能胡牌
-        } else if ((classNum[i] == classNum[nowResult]) && (classNum[i] == 3) && (word[i] == word[nowResult]) &&
+        } else if ((typeNum[i] == typeNum[nowResult]) && (typeNum[i] == 3) && (word[i] == word[nowResult]) &&
                    (result[i] != 0))//找到风牌的AA？
         {
             int a = i;
             for (int ii = i + 1; ii < 15; ii++)//在AA后找A
-                if ((classNum[ii] == classNum[nowResult]) && (word[ii] == word[nowResult]) && (result[ii] != 0))//找到AAA
+                if ((typeNum[ii] == typeNum[nowResult]) && (word[ii] == word[nowResult]) && (result[ii] != 0))//找到AAA
                 {
                     result[nowResult] = 0;
                     result[a] = 0;

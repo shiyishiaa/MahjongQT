@@ -18,7 +18,7 @@ find_package(Qt5Gui)
 set(UI_FILES Judge.ui MahjongQT.ui)
 set(RC_FILES)
 set(QRC_FILES MahjongQT.qrc)
-set(SOURCE_FILES main.cpp Judge.h Judge.cpp Mahjong.h Mahjong.cpp resource.h Tiles.h Tiles.cpp MahjongQT.cpp MahjongQT.h)
+set(SOURCE_FILES main.cpp Judge.h Judge.cpp Mahjong.h Mahjong.cpp Tiles.h Tiles.cpp MahjongQT.cpp MahjongQT.h)
 
 # Add the source in project root directory
 aux_source_directory(. DIRSRCS)

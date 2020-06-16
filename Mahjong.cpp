@@ -5,11 +5,11 @@ using namespace std;
 
 //空麻将
 Mahjong::Mahjong() {
-    _class = -1;
-    _index = -1;
-    _num = -1;
-    _word = -1;
-    _org = -1;
+    type = -1;
+    index = -1;
+    num = -1;
+    word = -1;
+    org = -1;
 }
 
 //分析麻将是那张牌
@@ -18,48 +18,48 @@ Mahjong::Mahjong(int MJ) {
         cout << "错误！" << endl;
         exit(-1);
     } else {
-        _org = MJ;
-        _class = (int) (MJ / 36.1);//除以小数避免36的倍数出错
-        _index = MJ % 36 % 4;
-        if (_class == 3) {
-            _num = 0;
-            _word = (int) (MJ % 36 / 4.1 + 1);
+        org = MJ;
+        type = (int) (MJ / 36.1);//除以小数避免36的倍数出错
+        index = MJ % 36 % 4;
+        if (type == 3) {
+            num = 0;
+            word = (int) (MJ % 36 / 4.1 + 1);
         } else {
-            _word = 0;
-            _num = (int) (ceil(fmodf((float) MJ, 36.1)) / 4.1 + 1);//使用fmodf实现对小数取余数，函数在math.h里
+            word = 0;
+            num = (int) (ceil(fmodf((float) MJ, 36.1)) / 4.1 + 1);//使用fmodf实现对小数取余数，函数在math.h里
         }
     }
 }
 
 //获取麻将类别
-int Mahjong::getClass() const {
-    return this->_class;
+int Mahjong::getType() const {
+    return this->type;
 }
 
 //获取麻将索引
 int Mahjong::getIndex() const {
-    return this->_index;
+    return this->index;
 }
 
 //获取麻将数字
 int Mahjong::getNum() const {
-    return this->_num;
+    return this->num;
 }
 
 //获取麻将文字（非万牌）
 int Mahjong::getWord() const {
-    return this->_word;
+    return this->word;
 }
 
 //获取麻将原始序数
 int Mahjong::getOrg() const {
-    return this->_org;
+    return this->org;
 }
 
 //打印麻将
 void Mahjong::print() const {
-    if (this->_word != 0) {
-        switch (this->_word) {
+    if (this->word != 0) {
+        switch (this->word) {
             default: {
                 cout << "空麻将！" << endl;
                 return;
@@ -94,7 +94,7 @@ void Mahjong::print() const {
             }
         }
     } else {
-        switch (this->_num) {
+        switch (this->num) {
             default: {
                 cout << "空麻将！" << endl;
                 return;
@@ -136,7 +136,7 @@ void Mahjong::print() const {
                 break;
             }
         }
-        switch (this->_class) {
+        switch (this->type) {
             case 0: {
                 cout << "筒 ";
                 break;
@@ -155,12 +155,12 @@ void Mahjong::print() const {
 
 //生成麻将路径
 string Mahjong::generatePath(Mahjong *M) {
-    int FileNum = 0;
-    switch (M->_word) {
+    int FileNum;
+    switch (M->word) {
         default:
             exit(-1);
         case 0:
-            FileNum = M->_class * 9 + M->_num;
+            FileNum = M->type * 9 + M->num;
             break;
         case 1:
             FileNum = 28;
