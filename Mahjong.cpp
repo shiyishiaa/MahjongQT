@@ -195,13 +195,11 @@ string Mahjong::generatePath(Mahjong *M) {
     for (int i = 0; i < 3; i++)
         FileNumStr += *p++;
 
-    string prefix = ":/MahjongQT/Resources/Images/";//ºÏ³ÉÂ·¾¶
-    string subfix = ".png";
     string FilePath;
 
-    FilePath.append(prefix);
-    FilePath.append(FileNumStr);
-    FilePath.append(subfix);
+    FilePath.append(":/MahjongQT/Resources/Images/")
+            .append(FileNumStr)
+            .append(".png");
 
     return FilePath;
 }
