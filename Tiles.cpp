@@ -101,8 +101,9 @@ void Tiles::parseTiles(string input) {
     int index;
     for (int i = 0; i < size; i++) {
         index = input.find(',');
-        string inputStr = input.substr(0, index), *stop;
-        int newNum = strtol(inputStr.c_str(), reinterpret_cast<char **>(stop), 10);
+        string inputStr = input.substr(0, index);
+        char *stop;
+        int newNum = strtol(inputStr.c_str(), &stop, 10);
         this->tiles[i] = Mahjong(newNum);
         input = input.erase(0, index + 1);
     }
