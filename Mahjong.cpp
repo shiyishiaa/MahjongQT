@@ -13,46 +13,46 @@ Mahjong::Mahjong() {
 }
 
 //分析麻将是那张牌
-Mahjong::Mahjong(int MJ) {
-    if ((MJ < 1) || (MJ > 136)) {
+Mahjong::Mahjong(unsigned int inputNum) {
+    if ((inputNum < 1) || (inputNum > 136)) {
         cout << "错误！" << endl;
         exit(-1);
     } else {
-        org = MJ;
-        type = (int) (MJ / 36.1);//除以小数避免36的倍数出错
-        index = MJ % 36 % 4;
+        org = inputNum;
+        type = (int) (inputNum / 36.1);//除以小数避免36的倍数出错
+        index = inputNum % 36 % 4;
         if (type == 3) {
             num = 0;
-            word = (int) (MJ % 36 / 4.1 + 1);
+            word = (int) (inputNum % 36 / 4.1 + 1);
         } else {
             word = 0;
-            num = (int) (ceil(fmodf((float) MJ, 36.1)) / 4.1 + 1);//使用fmodf实现对小数取余数，函数在math.h里
+            num = (int) (ceil(fmodf((float) inputNum, 36.1)) / 4.1 + 1);//使用fmodf实现对小数取余数，函数在math.h里
         }
     }
 }
 
 //获取麻将类别
-int Mahjong::getType() const {
+unsigned int Mahjong::getType() const {
     return this->type;
 }
 
 //获取麻将索引
-int Mahjong::getIndex() const {
+unsigned int Mahjong::getIndex() const {
     return this->index;
 }
 
 //获取麻将数字
-int Mahjong::getNum() const {
+unsigned int Mahjong::getNum() const {
     return this->num;
 }
 
 //获取麻将文字（非万牌）
-int Mahjong::getWord() const {
+unsigned int Mahjong::getWord() const {
     return this->word;
 }
 
 //获取麻将原始序数
-int Mahjong::getOrg() const {
+unsigned int Mahjong::getOrg() const {
     return this->org;
 }
 
@@ -154,13 +154,13 @@ void Mahjong::print() const {
 }
 
 //生成麻将路径
-string Mahjong::generatePath(Mahjong *M) {
+string Mahjong::generatePath(Mahjong *mahjong) {
     int FileNum;
-    switch (M->word) {
+    switch (mahjong->word) {
         default:
             exit(-1);
         case 0:
-            FileNum = M->type * 9 + M->num;
+            FileNum = mahjong->type * 9 + mahjong->num;
             break;
         case 1:
             FileNum = 28;
@@ -202,6 +202,16 @@ string Mahjong::generatePath(Mahjong *M) {
             .append(".png");
 
     return FilePath;
+}
+
+Mahjong &Mahjong::operator=(const Mahjong &another) {
+    if (this == &another)return *this;
+    this->org = another.getOrg();
+    this->num = another.getNum();
+    this->word = another.getWord();
+    this->type = another.getType();
+    this->index = another.getIndex();
+    return *this;
 }
 
 //析构函数

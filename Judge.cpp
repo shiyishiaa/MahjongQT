@@ -2,9 +2,9 @@
 
 Judge::Judge(QStringList argument) {
     ui.setupUi(this);
-    QString NumQStr = argument[1];
-    string NumStr = NumQStr.toStdString();
-    this->output(NumStr);
+    QString tilesQStr = argument[1];
+    string NumStr = tilesQStr.toStdString();
+    this->parseTiles(NumStr);
 
     if (this->judge())
         ui.isWin->setText(QString::fromUtf8("True"));

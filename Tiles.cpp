@@ -4,56 +4,30 @@ using namespace std;
 
 //默认随机生成14张牌
 Tiles::Tiles() {
-    this->num = 14;
-    // TODO 效率低下
-    srand(time(nullptr));//生成随机数
-    int random[14];
-    random[0] = (rand() % 136) + 1;
-    this->tiles[0] = Mahjong(random[0]);//获取1~136内的随机正整数
-    for (int i = 1; i < this->num; i++) {
-        random[i] = (rand() % 136) + 1;
-        int j = 0;
-        for (; j < i;)//避免重复获取
-        {
-            while (random[i] == random[j++]) {
-                srand(time(nullptr));
-                random[i] = (rand() % 136) + 1;
-                j = 0;
-            }
-        }
-        this->tiles[i] = Mahjong(random[i]);
-    }
-    this->sort();
-    string *p = this->picPath;
-    for (int i = 0; i < this->num; i++) {
-        *p = this->tiles[i].generatePath(&tiles[i]);
-        p++;
-    }
+    Tiles newTile(14);
+    *this = newTile;
+    this->size = 14;
 }
 
 //随机生成N张牌
-Tiles::Tiles(int N) {
-    this->num = N;
-    if (N >= 15) {
-        cout << "最大输出14张牌！" << endl;
-        this->num = 14;
-    }
-    if (N <= 0) {
+Tiles::Tiles(int num) {
+    this->size = num;
+    if (num <= 0) {
         cout << "错误输入！" << endl;
         exit(-1);
     }
-    srand(time(nullptr));//生成随机数
-    int random[14];
-    random[0] = (rand() % 136) + 1;
+
+    random_device e;
+    unsigned int random[14];
+    random[0] = (e() % 136) + 1;
     this->tiles[0] = Mahjong(random[0]);//获取1~136内的随机正整数
-    for (int i = 1; i < this->num; i++) {
-        random[i] = (rand() % 136) + 1;
+    for (int i = 1; i < this->size; i++) {
+        random[i] = (e() % 136) + 1;
         int j = 0;
         for (; j < i;)//避免重复获取
         {
             while (random[i] == random[j++]) {
-                srand(time(nullptr));
-                random[i] = (rand() % 136) + 1;
+                random[i] = (e() % 136) + 1;
                 j = 0;
             }
         }
@@ -61,46 +35,28 @@ Tiles::Tiles(int N) {
     }
     this->sort();
     string *p = this->picPath;
-    for (int i = 0; i < this->num; i++) {
-        *p = this->tiles[i].generatePath(&tiles[i]);
+    for (int i = 0; i < this->size; i++) {
+        *p = Mahjong::generatePath(&tiles[i]);
         p++;
     }
 }
 
 //生成136张牌（极为慢速）
 Tiles::Tiles(const string &PASSWORD) {
-    while (PASSWORD == "&((fdsiojfs@") {
-        this->num = 136;
-        srand(time(nullptr));//生成随机数
-        int random[136];
-        random[0] = (rand() % 136) + 1;
-        this->tiles[0] = Mahjong(random[0]);//获取1~136内的随机正整数
-        for (int i = 1; i < this->num; i++) {
-            random[i] = (rand() % 136) + 1;
-            int j = 0;
-            for (; j < i;)//避免重复获取
-            {
-                while (random[i] == random[j++]) {
-                    srand(time(nullptr));
-                    random[i] = (rand() % 136) + 1;
-                    j = 0;
-                }
-            }
-            this->tiles[i] = Mahjong(random[i]);
-        }
-        string *p = this->picPath;
-        for (int i = 0; i < this->num; i++) {
-            *p = this->tiles[i].generatePath(&tiles[i]);
-            p++;
-        }
+    if (PASSWORD == "&((fdsiojfs@") {
+        Tiles newTiles(136);
+        *this = newTiles;
         return;
     }
-    exit(-1);
+    Mahjong emptyMahjong;
+    this->tiles[0] = emptyMahjong;
+    this->picPath[0] = "";
+    this->size = 0;
 }
 
 //打印手牌
 void Tiles::print() const {
-    for (int i = 0; i < num; i++) {
+    for (int i = 0; i < size; i++) {
         this->tiles[i].print();
     }
     cout << endl;
@@ -108,7 +64,7 @@ void Tiles::print() const {
 
 //牌组排序（选择排序）
 void Tiles::sort() {
-    int newNum = this->num;
+    unsigned int newNum = this->size;
     Mahjong *outer = this->tiles;
     Mahjong *inner = this->tiles;
     auto *temp = new Mahjong;
@@ -141,21 +97,20 @@ string *Tiles::getPicPath() {
 Tiles::~Tiles() = default;
 
 //转换字符串载入手牌
-void Tiles::output(string input) {
-    int Index = 0;
-    for (int i = 0; i < num; i++) {
-        Index = input.find(',');
-        string inputStr = input.substr(0, Index);
-        int newNum = atoi(inputStr.c_str());
+void Tiles::parseTiles(string input) {
+    int index;
+    for (int i = 0; i < size; i++) {
+        index = input.find(',');
+        string inputStr = input.substr(0, index), *stop;
+        int newNum = strtol(inputStr.c_str(), reinterpret_cast<char **>(stop), 10);
         this->tiles[i] = Mahjong(newNum);
-        input = input.erase(0, Index + 1);
+        input = input.erase(0, index + 1);
     }
     sort();
-    for (int j = 0; j < num; j++) {
+    for (int j = 0; j < size; j++) {
         this->picPath[j] = Mahjong::generatePath(&tiles[j]);
     }
 }
-
 
 /**
  * Code created by my classmate Seto Lian
@@ -163,10 +118,10 @@ void Tiles::output(string input) {
  */
 //判断胡牌
 bool Tiles::judge() {
-    int typeNum[14];//牌类
-    int mahjongNum[14];//牌面数字
-    int word[14];//牌面字
-    int result[14] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};//全为0则胡牌，用于剔除已使用的牌
+    unsigned int typeNum[14];//牌类
+    unsigned int mahjongNum[14];//牌面数字
+    unsigned int word[14];//牌面字
+    unsigned int result[14] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};//全为0则胡牌，用于剔除已使用的牌
 
     for (int i = 0; i < 14; i++)//存入手牌信息
     {
@@ -182,10 +137,10 @@ bool Tiles::judge() {
     {
         if ((typeNum[i] == typeNum[nowResult]) && (typeNum[i] != 3) &&
             mahjongNum[i] == (mahjongNum[nowResult] + 1) &&
-            (result[i] != 0))//找到万条筒中的AB？
+            (result[i] != 0))//找到万条筒中的AB
         {
             int a = i;
-            for (int ii = i + 1; ii < 14; ii++)//在AB后找C
+            for (int ii = i + 1;;)//在AB后找C
             {
                 if ((typeNum[ii] == typeNum[nowResult]) && mahjongNum[ii] == (mahjongNum[nowResult] + 2) &&
                     (result[ii] != 0))//找到ABC
@@ -199,10 +154,10 @@ bool Tiles::judge() {
             }
         } else if ((typeNum[i] == typeNum[nowResult]) && (typeNum[i] != 3) &&
                    (mahjongNum[i] == mahjongNum[nowResult]) &&
-                   (result[i] != 0))//找到AA？
+                   (result[i] != 0))//找到AA
         {
             int a = i;
-            for (int ii = i + 1; ii < 14; ii++)//在AA后找A
+            for (int ii = i + 1;;)//在AA后找A
                 if ((typeNum[ii] == typeNum[nowResult]) && (mahjongNum[ii] == mahjongNum[nowResult]) &&
                     (result[ii] != 0))//找到AAA
                 {
@@ -219,10 +174,10 @@ bool Tiles::judge() {
                 } else
                     return false;//第二次出现AA，不能胡牌
         } else if ((typeNum[i] == typeNum[nowResult]) && (typeNum[i] == 3) && (word[i] == word[nowResult]) &&
-                   (result[i] != 0))//找到风牌的AA？
+                   (result[i] != 0))//找到风牌的AA
         {
             int a = i;
-            for (int ii = i + 1; ii < 15; ii++)//在AA后找A
+            for (int ii = i + 1;;)//在AA后找A
                 if ((typeNum[ii] == typeNum[nowResult]) && (word[ii] == word[nowResult]) && (result[ii] != 0))//找到AAA
                 {
                     result[nowResult] = 0;
@@ -244,4 +199,19 @@ bool Tiles::judge() {
             nowResult++;
     }
     return true;
+}
+
+Tiles &Tiles::operator=(const Tiles &another) {
+    if (this == &another)return *this;
+
+    for (int i = 0; i < another.size; i++) {
+        this->tiles[i] = another.tiles[i];
+        this->picPath[i] = another.picPath[i];
+    }
+    this->size = another.getSize();
+    return *this;
+}
+
+unsigned int Tiles::getSize() const {
+    return this->size;
 }

@@ -3,13 +3,14 @@
 #define TILES_H
 
 #include <ctime>
+#include <random>
 #include "Mahjong.h"
 
 class Tiles {
 public:
     Tiles();
 
-    explicit Tiles(int N);
+    explicit Tiles(int num);
 
     explicit Tiles(const string &PASSWORD);
 
@@ -21,14 +22,18 @@ public:
 
     string *getPicPath();
 
-    void output(string input);
+    unsigned int getSize() const;
+
+    void parseTiles(string input);
 
     bool judge();
 
     ~Tiles();
 
+    Tiles &operator=(const Tiles &another);
+
 private:
-    int num;
+    unsigned int size;
     Mahjong tiles[136];
     string picPath[14];
 };
