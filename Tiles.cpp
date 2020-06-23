@@ -10,7 +10,7 @@ Tiles::Tiles() {
 }
 
 //随机生成N张牌
-Tiles::Tiles(int num) {
+Tiles::Tiles(unsigned int num) {
     this->size = num;
     if (num <= 0) {
         cout << "错误输入！" << endl;
@@ -83,11 +83,6 @@ void Tiles::sort() {
     delete temp;
 }
 
-//选择第N张麻将
-Mahjong Tiles::select(int N) const {
-    return this->tiles[N - 1];
-}
-
 //获取牌堆麻将图片路径
 string *Tiles::getPicPath() {
     return this->picPath;
@@ -98,7 +93,7 @@ Tiles::~Tiles() = default;
 
 //转换字符串载入手牌
 void Tiles::parseTiles(string input) {
-    int index;
+    std::size_t index;
     for (int i = 0; i < size; i++) {
         index = input.find(',');
         string inputStr = input.substr(0, index);

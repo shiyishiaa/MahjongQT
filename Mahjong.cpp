@@ -5,11 +5,11 @@ using namespace std;
 
 //空麻将
 Mahjong::Mahjong() {
-    type = -1;
-    index = -1;
-    num = -1;
-    word = -1;
-    org = -1;
+    org = 0;
+    num = 10;
+    word = 8;
+    type = 4;
+    index = 4;
 }
 
 //分析麻将是那张牌
@@ -19,14 +19,14 @@ Mahjong::Mahjong(unsigned int inputNum) {
         exit(-1);
     } else {
         org = inputNum;
-        type = (int) (inputNum / 36.1);//除以小数避免36的倍数出错
+        type = (unsigned int) (inputNum / 36.1);//除以小数避免36的倍数出错
         index = inputNum % 36 % 4;
         if (type == 3) {
             num = 0;
-            word = (int) (inputNum % 36 / 4.1 + 1);
+            word = (unsigned int) (inputNum % 36 / 4.1 + 1);
         } else {
             word = 0;
-            num = (int) (ceil(fmodf((float) inputNum, 36.1)) / 4.1 + 1);//使用fmodf实现对小数取余数，函数在math.h里
+            num = (unsigned int) (ceil(fmodf((float) inputNum, 36.1)) / 4.1 + 1);//使用fmodf实现对小数取余数，函数在math.h里
         }
     }
 }
@@ -137,6 +137,10 @@ void Mahjong::print() const {
             }
         }
         switch (this->type) {
+            default: {
+                cout << "空麻将！" << endl;
+                return;
+            }
             case 0: {
                 cout << "筒 ";
                 break;

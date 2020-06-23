@@ -10,15 +10,13 @@ class Tiles {
 public:
     Tiles();
 
-    explicit Tiles(int num);
+    explicit Tiles(unsigned int num);
 
     explicit Tiles(const string &PASSWORD);
 
     void print() const;
 
     void sort();
-
-    Mahjong select(int N) const;
 
     string *getPicPath();
 

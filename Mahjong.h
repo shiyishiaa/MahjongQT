@@ -32,7 +32,7 @@ public:
     ~Mahjong();
 
 private:
-    unsigned int org;//原始序数
+    unsigned int org;//原始序数(1~136)
     unsigned int num;//牌面数字（0~9）（0为风牌和箭牌）
     unsigned int word;//牌面文字（0~7）（0为筒条万，1~7东南西北中发白）
     unsigned int type;//牌类别（筒 条 万 风箭）（0~3）
